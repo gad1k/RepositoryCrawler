@@ -1,32 +1,14 @@
 import difflib
 
 
-file_1 = """
-  col_01 varchar(10),
-  col_02 varchar(10),
-  col_03 varchar(10),
-  col_04 varchar(10),
-  col_05 varchar(10),
-  col_06 varchar(10),
-  col_07 varchar(10),
-  col_08 varchar(10),
-  col_09 varchar(10),
-"""
+with open("tests/integration/fixtures/simple_scenarios/add_column_null/src_file.sql") as src_file:
+    src = src_file.read()
 
-file_2 = """
-  col_01 varchar(10),
-  col_02 varchar(10),
-  col_08 varchar(10),
-  col_03 varchar(15),
-  col_07 varchar(10),
-  col_44 varchar(10),
-  col_05 varchar(10),
-  col_06 varchar(10),
-  col_09 varchar(10),
-"""
+with open("tests/integration/fixtures/simple_scenarios/add_column_null/trg_file.sql") as trg_file:
+    trg = trg_file.read()
 
 
-def show_diff_with_line_numbers(text1, text2, file1_name="file_1.sql", file2_name="file_2.sql"):
+def show_diff_with_line_numbers(text1, text2, file1_name="src_file.sql", file2_name="trg_file.sql"):
     lines1 = text1.strip().splitlines()
     lines2 = text2.strip().splitlines()
 
@@ -44,4 +26,4 @@ def show_diff_with_line_numbers(text1, text2, file1_name="file_1.sql", file2_nam
                 print(f"+ {file2_name}:{idx:>3}: {line}")
 
 
-show_diff_with_line_numbers(file_1, file_2)
+show_diff_with_line_numbers(src, trg)
