@@ -1,5 +1,6 @@
 import re
 
+from modules.constant import Polarity
 from modules.context import Context
 
 
@@ -31,9 +32,9 @@ class Lexeme:
 
 class LexemeSource(Lexeme):
     def __init__(self, idx, item):
-        super().__init__("+", idx, item)
+        super().__init__(Polarity.POSITIVE, idx, item)
 
 
 class LexemeTarget(Lexeme):
     def __init__(self, idx, item):
-        super().__init__("-", idx, item)
+        super().__init__(Polarity.NEGATIVE, idx, item)
