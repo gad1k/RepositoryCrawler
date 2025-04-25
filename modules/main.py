@@ -9,4 +9,5 @@ with open("../tests/integration/fixtures/simple_scenarios/add_column_null/trg_fi
 
 
 file_diff = FileDiff(src, trg)
-file_diff.extract()
+statements = file_diff.extract_statements()
+pass
