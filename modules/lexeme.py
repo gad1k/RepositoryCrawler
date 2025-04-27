@@ -5,10 +5,11 @@ from modules.context import Context
 
 
 class Lexeme:
-    def __init__(self, polarity, index, item):
+    def __init__(self, polarity, index, item, hint):
         self.polarity = polarity
         self.index = index
         self.item = item
+        self.hint = hint
         self.ctx = Context()
 
 
@@ -24,17 +25,18 @@ class Lexeme:
             "index": self.index,
             "name": m1,
             "type": re.sub(self.ctx.column_pattern(), "", m2.strip()),
-            "constraint": re.sub(self.ctx.column_pattern(), " ", m5.upper().strip()) if m5 else None
+            "constraint": re.sub(self.ctx.column_pattern(), " ", m5.upper().strip()) if m5 else None,
+            "hint": self.hint
         }
 
         return token
 
 
-class LexemeSource(Lexeme):
-    def __init__(self, idx, item):
-        super().__init__(Polarity.POSITIVE, idx, item)
+class SourceLexeme(Lexeme):
+    def __init__(self, idx, item, hint):
+        super().__init__(Polarity.NEGATIVE, idx, item, hint)
 
 
-class LexemeTarget(Lexeme):
-    def __init__(self, idx, item):
-        super().__init__(Polarity.NEGATIVE, idx, item)
+class TargetLexeme(Lexeme):
+    def __init__(self, idx, item, hint):
+        super().__init__(Polarity.POSITIVE, idx, item, hint)
