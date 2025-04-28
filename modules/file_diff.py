@@ -1,7 +1,6 @@
 from difflib import SequenceMatcher
 
-from modules.constant import Tag
-from modules.lexeme import LexemeSource, LexemeTarget
+from modules.engine import Engine
 from modules.statement import Statement
 
 
@@ -10,28 +9,13 @@ class FileDiff:
         self.file_src = file_src
         self.file_trg = file_trg
         self.sm = SequenceMatcher()
+        self.engine = Engine()
 
 
     def extract_statements(self):
         src = self.file_src.strip().splitlines()
         trg = self.file_trg.strip().splitlines()
-        self.sm.set_seqs(src, trg)
 
-        statements = list()
-        for tag, src_lo, src_hi, trg_lo, trg_hi in self.sm.get_opcodes():
-            if tag == Tag.EQUAL:
-                continue
-            if tag in (Tag.DELETE, Tag.REPLACE):
-                for idx, item in enumerate(src[src_lo:src_hi], start=src_lo + 1):
-                    lexeme = LexemeSource(idx, item)
-                    token = lexeme.generate_token()
-                    statement = Statement(token)
-                    statements.append(statement)
-            if tag in (Tag.INSERT, Tag.REPLACE):
-                for idx, item in enumerate(trg[trg_lo:trg_hi], start=trg_lo + 1):
-                    lexeme = LexemeTarget(idx, item)
-                    token = lexeme.generate_token()
-                    statement = Statement(token)
-                    statements.append(statement)
+        lexemes = self.engine.run(src, trg)
 
-        return statements
+        return lexemes

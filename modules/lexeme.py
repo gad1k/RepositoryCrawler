@@ -14,7 +14,7 @@ class Lexeme:
 
 
     def generate_token(self):
-        match = re.search(self.ctx.statement_pattern(), self.item, re.IGNORECASE)
+        match = re.search(self.ctx.lexeme_pattern(), self.item, re.IGNORECASE)
 
         m1 = match.group(1)
         m2 = match.group(2)
@@ -24,8 +24,8 @@ class Lexeme:
             "polarity": self.polarity,
             "index": self.index,
             "name": m1,
-            "type": re.sub(self.ctx.column_pattern(), "", m2.strip()),
-            "constraint": re.sub(self.ctx.column_pattern(), " ", m5.upper().strip()) if m5 else None,
+            "type": re.sub(self.ctx.space_pattern(), "", m2.strip()),
+            "constraint": re.sub(self.ctx.space_pattern(), " ", m5.upper().strip()) if m5 else None,
             "hint": self.hint
         }
 
