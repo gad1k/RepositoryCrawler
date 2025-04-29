@@ -16,6 +16,6 @@ class FileDiff:
         src = self.file_src.strip().splitlines()
         trg = self.file_trg.strip().splitlines()
 
-        lexemes = self.engine.run(src, trg)
+        lexemes = self.engine.analyze(src, trg)
 
         return lexemes
