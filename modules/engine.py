@@ -17,41 +17,45 @@ class Engine:
         self.matcher.set_seqs(src, trg)
 
         lexemes = list()
-        for tag, i1, i2, j1, j2 in self.matcher.get_opcodes():
+        for tag, slo, shi, tlo, thi in self.matcher.get_opcodes():
             if tag == Tag.EQUAL:
                 continue
+
             elif tag == Tag.REPLACE:
-                matched_right = set()
-                for idx1, l1 in enumerate(src[i1:i2]):
+                moved_trg_indexes = set()
+                for src_idx, src_line in enumerate(src[slo:shi]):
                     best_score = 0
-                    best_idx2 = None
-                    sig1 = self.extract_column_signature(l1)
-                    for idx2, l2 in enumerate(trg[j1:j2]):
-                        if idx2 in matched_right:
+                    best_trg_idx = None
+                    src_signature = self.extract_signature(src_line)
+                    for trg_idx, trg_line in enumerate(trg[tlo:thi]):
+                        if trg_idx in moved_trg_indexes:
                             continue
-                        sig2 = self.extract_column_signature(l2)
-                        score = self.calculate_score(sig1, sig2)
-                        line_distance = abs((i1 + idx1) - (j1 + idx2))
-                        if line_distance <= 2 and score > best_score and score >= 0.9:
+                        trg_signature = self.extract_signature(trg_line)
+                        score = self.calculate_score(src_signature, trg_signature)
+                        distance = abs((slo + src_idx) - (tlo + trg_idx))
+                        if distance <= 2 and score > best_score and score >= 0.9:
                             best_score = score
-                            best_idx2 = idx2
+                            best_trg_idx = trg_idx
                     if best_score > 0.9:
-                        l_lineno = i1 + idx1 + 1
-                        r_lineno = j1 + best_idx2 + 1
-                        lexemes.append(SourceLexeme(l_lineno, l1, f"moved from line {l_lineno} to {r_lineno}"))
-                        lexemes.append(TargetLexeme(r_lineno, trg[j1 + best_idx2], f"moved from line {l_lineno} to {r_lineno}"))
-                        matched_right.add(best_idx2)
+                        moved_trg_indexes.add(best_trg_idx)
+                        sno = slo + src_idx + 1
+                        tno = tlo + best_trg_idx + 1
+                        hint = f"moved from line {sno} to {tno}"
+                        lexemes.append(SourceLexeme(sno, src_line, hint))
+                        lexemes.append(TargetLexeme(tno, trg[tlo + best_trg_idx], hint))
                     else:
-                        lexemes.append(SourceLexeme(i1 + idx1 + 1, l1, None))
-                for idx2, l2 in enumerate(trg[j1:j2]):
-                    if idx2 not in matched_right:
-                        lexemes.append(TargetLexeme(j1 + idx2 + 1, l2, None))
+                        lexemes.append(SourceLexeme(slo + src_idx + 1, src_line))
+                for idx, line in enumerate(trg[tlo:thi]):
+                    if idx not in moved_trg_indexes:
+                        lexemes.append(TargetLexeme(tlo + idx + 1, line))
+
             elif tag == Tag.DELETE:
-                for idx, line in enumerate(src[i1:i2]):
-                    lexemes.append(SourceLexeme(i1 + idx + 1, line, None))
+                for idx, line in enumerate(src[slo:shi]):
+                    lexemes.append(SourceLexeme(slo + idx + 1, line))
+
             elif tag == Tag.INSERT:
-                for idx, line in enumerate(trg[j1:j2]):
-                    lexemes.append(TargetLexeme(j1 + idx + 1, line, None))
+                for idx, line in enumerate(trg[tlo:thi]):
+                    lexemes.append(TargetLexeme(tlo + idx + 1, line))
 
         return lexemes
 
@@ -61,6 +65,6 @@ class Engine:
         return self.estimator.ratio()
 
 
-    def extract_column_signature(self, line):
+    def extract_signature(self, line):
         match = re.match(self.ctx.lexeme_pattern(), line.strip().rstrip(','))
         return match.group(2).strip() if match else ""

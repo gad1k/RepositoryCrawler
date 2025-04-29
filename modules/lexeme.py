@@ -33,10 +33,10 @@ class Lexeme:
 
 
 class SourceLexeme(Lexeme):
-    def __init__(self, idx, item, hint):
-        super().__init__(Polarity.NEGATIVE, idx, item, hint)
+    def __init__(self, idx, item, hint=None):
+        super().__init__(Polarity.NEGATIVE, idx, item.strip().rstrip(','), hint)
 
 
 class TargetLexeme(Lexeme):
-    def __init__(self, idx, item, hint):
-        super().__init__(Polarity.POSITIVE, idx, item, hint)
+    def __init__(self, idx, item, hint=None):
+        super().__init__(Polarity.POSITIVE, idx, item.strip().rstrip(','), hint)
