@@ -35,6 +35,5 @@ class Crawler:
         """
 
         file_diff = FileDiff(src, trg)
-        for lexeme in file_diff.extract_statements():
-            print(lexeme.polarity, lexeme.index, lexeme.item, lexeme.hint)
-
+        file_diff.build_scripts()
+        file_diff.render_scripts()

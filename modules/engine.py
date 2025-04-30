@@ -12,7 +12,7 @@ class Engine:
         self.ctx = Context()
 
 
-    def analyze(self, src, trg):
+    def produce_lexemes(self, src, trg):
         self.sm.set_seqs(src, trg)
 
         lexemes = list()
