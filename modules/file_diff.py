@@ -1,5 +1,3 @@
-from difflib import SequenceMatcher
-
 from modules.engine import Engine
 from modules.statement import Statement
 
@@ -8,7 +6,7 @@ class FileDiff:
     def __init__(self, file_src, file_trg):
         self.file_src = file_src
         self.file_trg = file_trg
-        self.sm = SequenceMatcher()
+        self.scripts = list()
         self.engine = Engine()
 
 
@@ -17,5 +15,8 @@ class FileDiff:
         trg = self.file_trg.strip().splitlines()
 
         lexemes = self.engine.analyze(src, trg)
+        for lexeme in lexemes:
+            token = lexeme.generate_token()
+            statement = Statement(token)
 
         return lexemes
