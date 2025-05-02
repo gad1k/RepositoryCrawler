@@ -17,8 +17,8 @@ class Lexeme:
         match = re.search(self.ctx.lexeme_pattern(), self.item, re.IGNORECASE)
 
         m1 = match.group(1)
-        m2 = match.group(2)
-        m5 = match.group(5)
+        m2 = match.group(3)
+        m5 = match.group(6)
 
         token = {
             "polarity": self.polarity,
@@ -34,9 +34,9 @@ class Lexeme:
 
 class SourceLexeme(Lexeme):
     def __init__(self, idx, item, hint=None):
-        super().__init__(Polarity.NEGATIVE, idx, item.strip().rstrip(","), hint)
+        super().__init__(Polarity.NEGATIVE.value, idx, item.strip().rstrip(","), hint)
 
 
 class TargetLexeme(Lexeme):
     def __init__(self, idx, item, hint=None):
-        super().__init__(Polarity.POSITIVE, idx, item.strip().rstrip(","), hint)
+        super().__init__(Polarity.POSITIVE.value, idx, item.strip().rstrip(","), hint)

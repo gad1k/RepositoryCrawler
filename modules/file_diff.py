@@ -13,6 +13,9 @@ class FileDiff:
         statement_bundle = StatementBundle(self.src_file, self.trg_file)
         statements = statement_bundle.produce_statements()
 
+        for statement in statements:
+            print(statement)
+
         # while len(statements) != 0:
         #     statement = statements.pop(0)
         #
