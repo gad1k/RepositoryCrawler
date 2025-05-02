@@ -13,34 +13,34 @@ class FileDiff:
         statement_bundle = StatementBundle(self.src_file, self.trg_file)
         statements = statement_bundle.produce_statements()
 
-        while len(statements) != 0:
-            statement = statements.pop(0)
-
-            for idx, stmt in enumerate(statements):
-                vector = statement.get_vector(stmt)
-                if vector == "Alter":
-                    script = Alter()
-                    statements.pop(idx)
-                    break
-                elif vector == "Change":
-                    script = Change()
-                    statements.pop(idx)
-                    break
-                elif vector == "Move":
-                    script = Move()
-                    statements.pop(idx)
-                    break
-                elif vector == "Rename":
-                    script = Rename()
-                    statements.pop(idx)
-                    break
-            else:
-                if statement.has_positive_polarity():
-                    script = Add()
-                else:
-                    script = Drop()
-
-            self.scripts.append(script)
+        # while len(statements) != 0:
+        #     statement = statements.pop(0)
+        #
+        #     for idx, stmt in enumerate(statements):
+        #         vector = statement.get_vector(stmt)
+        #         if vector == "Alter":
+        #             script = Alter()
+        #             statements.pop(idx)
+        #             break
+        #         elif vector == "Change":
+        #             script = Change()
+        #             statements.pop(idx)
+        #             break
+        #         elif vector == "Move":
+        #             script = Move()
+        #             statements.pop(idx)
+        #             break
+        #         elif vector == "Rename":
+        #             script = Rename()
+        #             statements.pop(idx)
+        #             break
+        #     else:
+        #         if statement.has_positive_polarity():
+        #             script = Add()
+        #         else:
+        #             script = Drop()
+        #
+        #     self.scripts.append(script)
 
 
     def render_scripts(self):

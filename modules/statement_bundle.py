@@ -13,7 +13,7 @@ class StatementBundle:
         statements = list()
 
         for lexeme in self.engine.produce_lexemes(self.src_file, self.trg_file):
-            print(lexeme.polarity, lexeme.index, lexeme.item, lexeme.hint)
+            print(f"{lexeme.polarity} :: {lexeme.index:>2} :: {lexeme.item:<28} :: {lexeme.hint}")
             token = lexeme.generate_token()
             statement = Statement(token)
             statements.append(statement)
