@@ -16,11 +16,14 @@ class FileDiff:
         for statement in statements:
             print(statement)
 
-        # while len(statements) != 0:
-        #     statement = statements.pop(0)
-        #
-        #     for idx, stmt in enumerate(statements):
-        #         vector = statement.get_vector(stmt)
+        while len(statements) != 0:
+            statement = statements.pop(0)
+
+            for idx, stmt in enumerate(statements):
+                vector = statement.get_vector(stmt)
+                print(f"{int(vector, 2):<3} {vector}")
+                print(statement)
+                print(stmt)
         #         if vector == "Alter":
         #             script = Alter()
         #             statements.pop(idx)
