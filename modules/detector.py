@@ -22,6 +22,6 @@ class Detector:
                 if distance.meets_threshold() and score.needs_update():
                     score.update(trg_offset)
             if score.meets_threshold():
-                movements.add({src_offset: score.get_best_idx()})
+                movements.add({src_offset: score.get_best_offset()})
 
         return movements
