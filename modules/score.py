@@ -27,5 +27,5 @@ class Score:
         return self.best_ratio > 0.85
 
 
-    def get_best_idx(self):
+    def get_best_offset(self):
         return self.best_offset
